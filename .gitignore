@@ -17,3 +17,15 @@ __pycache__/
 *.ini
 *.txt
 !.github/workflows/*.yaml
+venv/
+
+# Docker相关
+.docker/
+docker-compose.override.yml
+data/
+downloads/
+
+# 保留示例配置文件
+!settings.example.json
+!docker-compose.yml
+!README.docker.md

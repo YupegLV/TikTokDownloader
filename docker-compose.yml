@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  tiktok-downloader:
+    build: .
+    container_name: tiktok-downloader
+    restart: unless-stopped
+    ports:
+      - "5555:5555"  # API端口
+    volumes:
+      - ./data:/TikTokDownloader/data  # 数据目录
+      - ./downloads:/TikTokDownloader/downloads  # 下载目录
+      - ./settings.json:/TikTokDownloader/settings.json  # 配置文件
+      - ./DouK-Downloader.db:/TikTokDownloader/DouK-Downloader.db  # 数据库文件
+    environment:
+      - TZ=Asia/Shanghai
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5555/"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    # 资源限制
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G

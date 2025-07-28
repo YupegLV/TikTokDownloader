@@ -389,13 +389,21 @@ class TikTokDownloader:
         self.parameter.CLEANER.set_rule(TEXT_REPLACEMENT, True)
 
     async def run(self):
-        self.project_info()
+        # 跳过项目信息显示
+        # self.project_info()
         self.check_config()
         await self.check_settings(
             False,
         )
-        if await self.disclaimer():
-            await self.main_menu(safe_pop(self.run_command))
+        # 跳过免责声明确认，直接进入webapi模式
+        # 如果配置中没有确认过免责声明，自动确认
+        if not self.config["Disclaimer"]:
+            # 默认设置语言为中文
+            await self._update_language("zh_CN")
+            await self.database.update_config_data("Disclaimer", 1)
+        
+        # 直接进入webapi模式
+        await self.server()
 
     def periodic_update_params(self):
         async def inner():
